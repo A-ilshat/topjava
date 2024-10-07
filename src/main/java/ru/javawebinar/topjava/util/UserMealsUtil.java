@@ -3,10 +3,12 @@ package ru.javawebinar.topjava.util;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExcess;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserMealsUtil {
     public static void main(String[] args) {
@@ -44,17 +46,21 @@ public class UserMealsUtil {
                 .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime))
                 .map(meal -> new UserMealWithExcess(meal.getDateTime(), meal.getDescription(), meal.getCalories(),
                         isExcessCalPerDay(meals, meal.getDateTime(), caloriesPerDay)))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private static boolean isExcessCalPerDay(List<UserMeal> meals, LocalDateTime day, int caloriesPerDay) {
-        int sumCalPerDay = 0;
-        for (UserMeal meal : meals) {
-            if (meal.getDateTime().toLocalDate().compareTo(day.toLocalDate()) == 0) {
-                int calories = meal.getCalories();
-                sumCalPerDay += calories;
-            }
-        }
+        int sumCalPerDay = meals.stream()
+                .filter(meal -> meal.getDateTime().toLocalDate().isEqual(day.toLocalDate()))
+                .mapToInt(UserMeal::getCalories).sum();
         return sumCalPerDay >= caloriesPerDay;
+    }
+
+    private static boolean isExcessCalPerDay2(List<UserMeal> meals, LocalDateTime day, int caloriesPerDay) {
+        Map<LocalDate, Integer> sumCaloriesInDate = meals.stream()
+                .collect(Collectors.groupingBy(meal -> meal.getDateTime().toLocalDate(), Collectors.summingInt(UserMeal::getCalories)));
+        return sumCaloriesInDate.entrySet().stream()
+                .findFirst()
+                .filter(entry -> entry.getKey().isEqual(day.toLocalDate()) && entry.getValue() >= caloriesPerDay).isPresent();
     }
 }
