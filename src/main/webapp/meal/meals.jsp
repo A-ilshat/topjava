@@ -16,15 +16,21 @@
     <h3><a href="index.html">Home</a></h3>
     <hr>
     <p>
-        <label style="font-weight: bolder" for="calories">Норма калорий</label>
+        <label style="font-weight: bolder" for="calories">Норма калории</label>
         <input type="number" id="calories">
+    </p>
+
+    <p>
+        <a href="meals?action=new">Добавить</a>
+        <a href="meals?action=clear">Очистить список</a>
     </p>
     <table border="1">
         <thead>
             <tr bgcolor="#bdb76b">
-                <th scope="col">date</th>
-                <th scope="col">description</th>
-                <th scope="col">calories</th>
+                <th scope="col">Дата/Время</th>
+                <th scope="col">Описание</th>
+                <th scope="col">Калорий</th>
+                <th scope="col">Действия</th>
             </tr>
         </thead>
         <tbody style="font-weight: bold">
@@ -39,6 +45,11 @@
                 </td>
                 <td>
                     <c:out value="${meal.calories}"/>
+                </td>
+
+                <td>
+                    <a href="meals?&action=edit&id=${meals.indexOf(meal)}">Редактировать</a>
+                    <a href="meals?&action=delete&id=${meals.indexOf(meal)}">Удалить</a>
                 </td>
             </tr>
         </c:forEach>
