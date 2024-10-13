@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
-import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.ServletException;
@@ -15,12 +15,13 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class MealServlet extends HttpServlet {
     private static final Logger log = getLogger(MealServlet.class);
-    private static final List<Meal> meals = MealsUtil.meals;
+    private static final List<MealTo> meals = MealsUtil.mealsWithExcess();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         log.debug("redirect to meals");
-
-        resp.sendRedirect("meals.jsp");
+        req.setAttribute("meals", meals);
+        log.debug("meals with excess: {}", meals);
+        getServletContext().getRequestDispatcher("/meals.jsp").forward(req, resp);
     }
 }

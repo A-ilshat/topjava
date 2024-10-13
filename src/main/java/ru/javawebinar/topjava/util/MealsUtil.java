@@ -29,11 +29,7 @@ public class MealsUtil {
     }
 
     public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
-                .collect(
-                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
-//                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)
-                );
+        Map<LocalDate, Integer> caloriesSumByDate = getCaloriesSumByDate(meals);
 
         return meals.stream()
                 .filter(meal -> TimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime))
@@ -41,7 +37,18 @@ public class MealsUtil {
                 .collect(Collectors.toList());
     }
 
+    private static Map<LocalDate, Integer> getCaloriesSumByDate(List<Meal> meals) {
+        return meals.stream()
+                .collect(Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories)));
+    }
+
     private static MealTo createTo(Meal meal, boolean excess) {
         return new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
+    }
+
+    public static List<MealTo> mealsWithExcess() {
+        return meals.stream()
+                .map(meal -> createTo(meal, getCaloriesSumByDate(meals).get(meal.getDate()) > caloriesPerDay))
+                .collect(Collectors.toList());
     }
 }
