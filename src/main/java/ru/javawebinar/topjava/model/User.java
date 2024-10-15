@@ -82,7 +82,7 @@ public class User extends AbstractNamedEntity {
     }
 
     public boolean isNew(User user) {
-        return !Objects.equals(this.email, user.getEmail());
+        return !this.email.equalsIgnoreCase(user.getEmail());
     }
 
     @Override
