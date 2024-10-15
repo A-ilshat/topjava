@@ -81,6 +81,10 @@ public class User extends AbstractNamedEntity {
         return password;
     }
 
+    public boolean isNew(User user) {
+        return !Objects.equals(this.email, user.getEmail());
+    }
+
     @Override
     public String toString() {
         return "User{" +
