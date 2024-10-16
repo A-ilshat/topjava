@@ -31,6 +31,7 @@
             <th>Calories</th>
             <th></th>
             <th></th>
+            <th>user id</th>
         </tr>
         </thead>
         <c:forEach items="${requestScope.meals}" var="meal">
@@ -46,6 +47,7 @@
                 <td>${meal.calories}</td>
                 <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
                 <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
+                <td>${meal.userId}</td>
             </tr>
         </c:forEach>
     </table>
