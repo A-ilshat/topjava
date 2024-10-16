@@ -55,6 +55,9 @@ public class MealsUtil {
     }
 
     public static Meal convertToMeal(MealTo mealTo) {
-        return new Meal(mealTo.getId(), mealTo.getDateTime(), mealTo.getDescription(), mealTo.getCalories());
+        Meal meal = new Meal(mealTo.getDateTime(), mealTo.getDescription(), mealTo.getCalories());
+        meal.setId(mealTo.getId());
+        meal.setUserId(mealTo.getUserId());
+        return meal;
     }
 }

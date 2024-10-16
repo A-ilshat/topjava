@@ -43,7 +43,7 @@ public class MealServlet extends HttpServlet {
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")), false);
-
+        mealTo.setUserId(SecurityUtil.authUserId());
         log.info(mealTo.isNew() ? "Create {}" : "Update {}", mealTo);
         controller.save(MealsUtil.convertToMeal(mealTo));
         response.sendRedirect("meals");
