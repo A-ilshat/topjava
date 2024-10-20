@@ -19,11 +19,10 @@ public class InMemoryUserRepository implements UserRepository {
     private final Map<Integer, User> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
-     static {
-        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+      {
         User newUser = new User(null, "new user", "newuser@ya.ru", "1234", 2000, true, Arrays.asList(Role.USER));
-        userRepository.save(newUser);
-        userRepository.getAll().forEach(System.out::println);
+        save(newUser);
+        getAll().forEach(System.out::println);
     }
 
     @Override
