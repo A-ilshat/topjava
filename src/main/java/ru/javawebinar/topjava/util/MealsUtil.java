@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.util;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.dto.MealTo;
+import ru.javawebinar.topjava.to.MealTo;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -49,15 +49,12 @@ public class MealsUtil {
     }
 
     private static MealTo createTo(Meal meal, boolean excess) {
-        MealTo mealTo = new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
-        mealTo.setUserId(meal.getUserId());
-        return mealTo;
+        return new MealTo(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
 
     public static Meal convertToMeal(MealTo mealTo) {
         Meal meal = new Meal(mealTo.getDateTime(), mealTo.getDescription(), mealTo.getCalories());
         meal.setId(mealTo.getId());
-        meal.setUserId(mealTo.getUserId());
         return meal;
     }
 }

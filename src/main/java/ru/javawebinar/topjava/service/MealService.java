@@ -3,8 +3,8 @@ package ru.javawebinar.topjava.service;
 import org.springframework.stereotype.Service;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
-import ru.javawebinar.topjava.repository.inmemory.InMemoryMealRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -35,7 +35,11 @@ public class MealService {
         return repository.getAll(userId);
     }
 
-    public void update(Meal meal, int userId) {
-        checkNotFoundWithId(repository.save(meal, userId), meal.getId());
+    public List<Meal> getAllByDate(LocalDateTime startDate, LocalDateTime endDate, int userId) {
+        return repository.getAllByDate(startDate, endDate, userId);
+    }
+
+    public void update(Meal meal, int id, int userId) {
+        checkNotFoundWithId(repository.save(meal, userId), id);
     }
 }

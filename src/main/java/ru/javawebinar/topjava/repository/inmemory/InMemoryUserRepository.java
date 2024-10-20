@@ -7,12 +7,10 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Repository
 public class InMemoryUserRepository implements UserRepository {
@@ -21,9 +19,11 @@ public class InMemoryUserRepository implements UserRepository {
     private final Map<Integer, User> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
 
-    {
-        repository.put(1, new User(1, "user1", "user@ya.ru", "1234", 2000,
-                true, Arrays.asList(Role.USER)));
+     static {
+        InMemoryUserRepository userRepository = new InMemoryUserRepository();
+        User newUser = new User(null, "new user", "newuser@ya.ru", "1234", 2000, true, Arrays.asList(Role.USER));
+        userRepository.save(newUser);
+        userRepository.getAll().forEach(System.out::println);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public User save(User user) {
         log.info("save {}", user);
-        if (user.isNew(get(user.getId()))) {
+        if (user.isNew()) {
             user.setId(counter.incrementAndGet());
             return repository.put(user.getId(), user);
         }
@@ -51,7 +51,9 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public List<User> getAll() {
         log.info("getAll");
-        return new ArrayList<>(repository.values());
+        return repository.values().stream()
+                .sorted(Comparator.comparing(User::getName))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -1,11 +1,9 @@
-package ru.javawebinar.topjava.dto;
+package ru.javawebinar.topjava.to;
 
 import java.time.LocalDateTime;
 
 public class MealTo {
     private final Integer id;
-
-    private int userId;
 
     private final LocalDateTime dateTime;
 
@@ -27,14 +25,6 @@ public class MealTo {
         return id;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
     public LocalDateTime getDateTime() {
         return dateTime;
     }
@@ -49,10 +39,6 @@ public class MealTo {
 
     public boolean isExcess() {
         return excess;
-    }
-
-    public boolean isNew() {
-        return id == null;
     }
 
     @Override
