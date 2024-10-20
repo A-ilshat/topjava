@@ -1,37 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ru">
 <head>
     <title>Users</title>
 </head>
 <body>
-<section>
-    <h3><a href="index.html">Home</a></h3>
-    <hr/>
-    <h2>Users</h2>
-    <a href="meals?action=create">Add Meal</a>
-    <br><br>
-    <table border="1" cellpadding="8" cellspacing="0">
-        <thead>
-        <tr>
-            <th>id</th>
-            <th>Имя</th>
-            <th>Email</th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <c:forEach items="${requestScope.users}" var="user">
-            <jsp:useBean id="user" type="ru.javawebinar.topjava.model.User"/>
-            <tr>
-                <td>${user.id}</td>
-                <td>${user.name}</td>
-                <td>${user.email}</td>
-                <td><a href="meals?action=update&id=${user.id}">Update</a></td>
-                <td><a href="meals?action=delete&id=${user.id}">Delete</a></td>
-            </tr>
-        </c:forEach>
-    </table>
-</section>
+<h3><a href="index.html">Home</a></h3>
+<hr>
+<h2>Users</h2>
 </body>
 </html>
