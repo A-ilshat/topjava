@@ -8,19 +8,18 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.MealTestData.assertMatchListWithoutSorted;
-import static ru.javawebinar.topjava.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
+import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 @ContextConfiguration({"classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"})
@@ -37,9 +36,8 @@ public class MealServiceTest {
 
     @Test
     public void get() {
-        Meal expMeal = MealTestData.userMeal;
-        Meal actMeal = mealService.get(100005, USER_ID);
-        assertEquals(expMeal, actMeal);
+        Meal actMeal = mealService.get(MEAL_ID + 2, USER_ID);
+        assertEquals(userMeal, actMeal);
     }
 
     @Test
@@ -49,46 +47,38 @@ public class MealServiceTest {
 
     @Test
     public void getNotFound() {
-        assertThrows(NotFoundException.class, () -> mealService.get(999, USER_ID));
+        assertThrows(NotFoundException.class, () -> mealService.get(MEAL_ID - 1, USER_ID));
     }
 
     @Test
     public void delete() {
-        mealService.delete(100005, 100000);
+        mealService.delete(MEAL_ID + 2, USER_ID);
         assertThrows(NotFoundException.class, () -> mealService.get(userMeal.getId(), USER_ID));
     }
 
     @Test
     public void deleteByAnotherUser() {
-        mealService.delete(100005, 100000);
-        assertThrows(NotFoundException.class, () -> mealService.get(userMeal.getId(), ADMIN_ID));
+        assertThrows(NotFoundException.class, () -> mealService.delete(MEAL_ID + 2, ADMIN_ID));
     }
 
     @Test
     public void deleteNotFount() {
-        assertThrows(NotFoundException.class, () -> mealService.get(999, USER_ID));
+        assertThrows(NotFoundException.class, () -> mealService.get(MEAL_ID - 1, USER_ID));
     }
 
     @Test
     public void getBetweenInclusive() {
-        LocalDateTime startDate = LocalDateTime.of(2020, Month.JANUARY, 30, 0, 0, 1);
-        LocalDateTime endDate = LocalDateTime.of(2020, Month.JANUARY, 30, 23, 59, 59);
+        LocalDate startDate = LocalDate.of(2020, Month.JANUARY, 30);
+        LocalDate endDate = LocalDate.of(2020, Month.JANUARY, 30);
 
         List<Meal> expected = getTestBetweenInclusive();
-        List<Meal> actual = mealService.getBetweenInclusive(startDate.toLocalDate(), endDate.toLocalDate(), USER_ID);
-        assertMatchListWithoutSorted(actual, expected);
+        List<Meal> actual = mealService.getBetweenInclusive(startDate, endDate, USER_ID);
+        assertMatchListWithSorted(actual, expected);
     }
 
     @Test
     public void getAll() {
-        List<Meal> expMeals = meals;
-        List<Meal> actMeals = mealService.getAll(USER_ID);
-        assertMatchListWithoutSorted(actMeals, expMeals);
-    }
-
-    @Test
-    public void getAllSortedByDate() {
-        List<Meal> expMeals = MealTestData.getTestMealsBySorted();
+        List<Meal> expMeals = getAllTestMeals();
         List<Meal> actMeals = mealService.getAll(USER_ID);
         assertMatchListWithSorted(actMeals, expMeals);
     }
