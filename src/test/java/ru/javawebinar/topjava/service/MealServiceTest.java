@@ -38,11 +38,11 @@ public class MealServiceTest {
     public final TestName testName = new TestName();
 
     @Rule
-    public final TestRule watcher = new WatcherTest().watcher;
+    public final WatcherTest watcher = new WatcherTest();
 
     @Before
     public void setUp() throws Exception {
-        WatcherTest.setTestName(testName.getMethodName());
+        watcher.setTestName(testName.getMethodName());
     }
 
     @Autowired

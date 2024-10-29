@@ -7,9 +7,9 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WatcherTest {
+public class WatcherTest extends TestWatcher {
     private final Logger log = LoggerFactory.getLogger(WatcherTest.class);
-    private static String testName;
+    private String testName;
 
     @Rule
     public final TestRule watcher = new TestWatcher() {
@@ -28,7 +28,7 @@ public class WatcherTest {
         }
     };
 
-    public static void setTestName(String methodName) {
-        testName = methodName;
+    public void setTestName(String testName) {
+        this.testName = testName;
     }
 }
