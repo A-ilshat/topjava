@@ -1,11 +1,8 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestName;
-import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -35,15 +32,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
 
     @Rule
-    public final TestName testName = new TestName();
-
-    @Rule
     public final WatcherTest watcher = new WatcherTest();
-
-    @Before
-    public void setUp() throws Exception {
-        watcher.setTestName(testName.getMethodName());
-    }
 
     @Autowired
     private MealService service;
