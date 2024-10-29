@@ -9,6 +9,9 @@ import ru.javawebinar.topjava.repository.MealRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,13 +31,15 @@ public class JpaMealRepository implements MealRepository {
             manager.persist(meal);
             return meal;
         } else {
-            return manager.createNamedQuery(Meal.UPDATE_MEAL)
-                    .setParameter("date_time", meal.getDateTime())
-                    .setParameter("description", meal.getDescription())
-                    .setParameter("calories", meal.getCalories())
-                    .setParameter("id", meal.getId())
-                    .setParameter("user_id", userId)
-                    .executeUpdate() != 0 ? meal : null;
+            CriteriaBuilder cb = manager.getCriteriaBuilder();
+            CriteriaUpdate<Meal> update = cb.createCriteriaUpdate(Meal.class);
+            Root<Meal> mealRoot = update.from(Meal.class);
+            update.set("dateTime", meal.getDateTime());
+            update.set("description", meal.getDescription());
+            update.set("calories", meal.getCalories());
+            update.where(cb.equal(mealRoot.get("id"), meal.getId()), cb.equal(mealRoot.get("user"), userId));
+
+            return manager.createQuery(update).executeUpdate() != 0 ? meal : null;
         }
     }
 
