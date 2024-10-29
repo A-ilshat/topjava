@@ -9,9 +9,6 @@ import ru.javawebinar.topjava.repository.MealRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -66,7 +63,7 @@ public class JpaMealRepository implements MealRepository {
         return manager.createNamedQuery(Meal.FIND_ALL_BY_DATE_TIME, Meal.class)
                 .setParameter("user_id", userId)
                 .setParameter("start_date_time", startDateTime)
-                .setParameter("end_date_time", endDateTime.minusSeconds(1))
+                .setParameter("end_date_time", endDateTime)
                 .getResultList();
     }
 }

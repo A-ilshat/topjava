@@ -10,10 +10,8 @@ import java.time.LocalTime;
         @NamedQuery(name = Meal.FIND_BY_ID, query = "SELECT m FROM Meal m WHERE m.id=:id AND m.user.id=:user_id"),
         @NamedQuery(name = Meal.DELETE_BY_ID, query = "DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:user_id"),
         @NamedQuery(name = Meal.FIND_ALL_BY_DATE_TIME, query = "SELECT m FROM Meal m WHERE m.user.id=:user_id AND " +
-                "dateTime BETWEEN :start_date_time AND :end_date_time ORDER BY dateTime DESC"),
-        @NamedQuery(name = Meal.FIND_ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:user_id ORDER BY dateTime DESC"),
-        @NamedQuery(name = Meal.UPDATE_MEAL, query = "UPDATE Meal m SET m.dateTime=:date_time, m.description=:description," +
-                "m.calories=:calories WHERE m.id=:id AND m.user.id=:user_id")
+                "dateTime >= :start_date_time AND dateTime < :end_date_time ORDER BY dateTime DESC"),
+        @NamedQuery(name = Meal.FIND_ALL_SORTED, query = "SELECT m FROM Meal m WHERE m.user.id=:user_id ORDER BY dateTime DESC")
 })
 
 @Entity
@@ -24,7 +22,6 @@ public class Meal extends AbstractBaseEntity {
     public static final String FIND_BY_ID = "Meal.findById";
     public static final String FIND_ALL_BY_DATE_TIME = "Meal.findAllByDateTime";
     public static final String FIND_ALL_SORTED = "Meal.findAllSorted";
-    public static final String UPDATE_MEAL = "Meal.updateMeal";
 
     @Column(name = "date_time", nullable = false)
     @NotNull
