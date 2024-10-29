@@ -7,13 +7,20 @@ import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class WatcherTest extends Stopwatch {
     private static final Logger log = LoggerFactory.getLogger(WatcherTest.class);
-    private static final List<String> logList = new ArrayList<>();
+    private static long totalTime = 0;
+    private static Description description;
+
+    private static Description getDescription() {
+        return description;
+    }
+
+    private void setDescription(Description description) {
+        WatcherTest.description = description;
+    }
 
     @Override
     protected void finished(long nanos, Description description) {
@@ -21,21 +28,18 @@ public class WatcherTest extends Stopwatch {
     }
 
     private void logTestInfo(Description description, long nanos) {
-        String logInfo = "TEST NAME: " +
-                description.getMethodName() +
-                ", TIME: " +
-                TimeUnit.NANOSECONDS.toMillis(nanos) +
-                "(ms)";
-
-        log.info(logInfo);
-        logList.add(logInfo);
+        totalTime += nanos;
+        setDescription(description);
+        log.info("TEST METHOD NAME: {}, TIME = {}(ms)", description.getMethodName(),
+                TimeUnit.NANOSECONDS.toMillis(nanos));
     }
 
     @ClassRule
     public static final ExternalResource resource = new ExternalResource() {
         @Override
         protected void after() {
-            logList.forEach(log::info);
+            log.info("TEST CLASS NAME: {}, TOTAL TIME = {}(ms)", getDescription().getClassName(),
+                    TimeUnit.NANOSECONDS.toMillis(totalTime));
         }
     };
 }
