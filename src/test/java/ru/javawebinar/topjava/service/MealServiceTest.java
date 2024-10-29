@@ -1,7 +1,11 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
+import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -9,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.javawebinar.topjava.WatcherTest;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -28,6 +33,17 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @Ignore
 public class MealServiceTest {
+
+    @Rule
+    public final TestName testName = new TestName();
+
+    @Rule
+    public final TestRule watcher = new WatcherTest().watcher;
+
+    @Before
+    public void setUp() throws Exception {
+        WatcherTest.setTestName(testName.getMethodName());
+    }
 
     @Autowired
     private MealService service;
