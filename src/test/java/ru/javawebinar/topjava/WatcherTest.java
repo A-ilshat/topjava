@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava;
 
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
@@ -14,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WatcherTest extends Stopwatch {
     private static final Logger log = LoggerFactory.getLogger(WatcherTest.class);
-    public static final List<String> logQuery = new ArrayList<>();
+    private static final List<String> logList = new ArrayList<>();
 
     @Override
     protected void finished(long nanos, Description description) {
@@ -22,20 +21,21 @@ public class WatcherTest extends Stopwatch {
     }
 
     private void logTestInfo(Description description, long nanos) {
-        String builder = "TEST NAME: " +
+        String logInfo = "TEST NAME: " +
                 description.getMethodName() +
                 ", TIME: " +
-                TimeUnit.NANOSECONDS.toMillis(nanos) + "(ms)";
+                TimeUnit.NANOSECONDS.toMillis(nanos) +
+                "(ms)";
 
-        log.info(builder);
-        logQuery.add(builder);
+        log.info(logInfo);
+        logList.add(logInfo);
     }
 
     @ClassRule
     public static final ExternalResource resource = new ExternalResource() {
         @Override
         protected void after() {
-            logQuery.forEach(log::info);
+            logList.forEach(log::info);
         }
     };
 }
