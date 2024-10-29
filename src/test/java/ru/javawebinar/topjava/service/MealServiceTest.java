@@ -1,9 +1,10 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
+import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,6 +33,9 @@ public class MealServiceTest {
 
     @Rule
     public final WatcherTest watcher = new WatcherTest();
+
+    @ClassRule
+    public static final ExternalResource resource = WatcherTest.resource;
 
     @Autowired
     private MealService service;
