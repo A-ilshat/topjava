@@ -27,11 +27,11 @@ public class WatcherTest {
         }
 
         private String formattedLogInfo(Description description, long nanos) {
-            int charCount = description.getMethodName().length();
+            int testNameLength = description.getMethodName().length();
             StringBuilder testInfoBuilder = new StringBuilder()
                     .append(description.getMethodName())
-                    .append("----------------------------")
-                    .delete(charCount, (charCount + charCount))
+                    .append("-----------------------------")
+                    .delete(testNameLength, (testNameLength + testNameLength))
                     .append(TimeUnit.NANOSECONDS.toMillis(nanos))
                     .append("(ms) \n");
 
