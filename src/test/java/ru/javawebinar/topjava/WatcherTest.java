@@ -28,7 +28,7 @@ public class WatcherTest {
         private String formattedLogInfo(Description description, long nanos) {
             int charCount = description.getMethodName().length();
             StringBuilder dynamicSymbols = new StringBuilder();
-            dynamicSymbols.append("----------------------------")
+            dynamicSymbols.append("-----------------------------")
                     .delete(0, charCount);
             return description.getMethodName() + dynamicSymbols + TimeUnit.NANOSECONDS.toMillis(nanos) + "(ms) \n";
         }
