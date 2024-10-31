@@ -21,16 +21,22 @@ public class WatcherTest {
         }
 
         private void logTestInfo(Description description, long nanos) {
-            log.info(formattedLogInfo(description, nanos));
-            logList.add(formattedLogInfo(description, nanos));
+            String formattedLogInfo = formattedLogInfo(description, nanos);
+            log.info(formattedLogInfo);
+            logList.add(formattedLogInfo);
         }
 
         private String formattedLogInfo(Description description, long nanos) {
             int charCount = description.getMethodName().length();
-            StringBuilder dynamicSymbols = new StringBuilder();
-            dynamicSymbols.append("----------------------------")
-                    .delete(0, charCount);
-            return description.getMethodName() + dynamicSymbols + TimeUnit.NANOSECONDS.toMillis(nanos) + "(ms) \n";
+            StringBuilder testInfoBuilder = new StringBuilder()
+                    .append(description.getMethodName())
+                    .append("----------------------------")
+                    .delete(charCount, (charCount + charCount))
+                    .append(TimeUnit.NANOSECONDS.toMillis(nanos))
+                    .append("(ms) \n");
+
+            //will be displayed "test name----------------------00(ms)"
+            return testInfoBuilder.toString();
         }
     };
 
