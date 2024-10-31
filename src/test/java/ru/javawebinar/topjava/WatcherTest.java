@@ -39,7 +39,7 @@ public class WatcherTest {
         protected void after() {
             StringBuilder builder = new StringBuilder();
             logList.forEach(builder::append);
-            log.info(String.valueOf(builder));
+            log.info("\n{}", builder);
         }
     };
 }
