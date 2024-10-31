@@ -4,6 +4,7 @@ import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExternalResource;
+import org.junit.rules.Stopwatch;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -32,7 +33,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 public class MealServiceTest {
 
     @Rule
-    public final WatcherTest watcher = new WatcherTest();
+    public final Stopwatch watcher = WatcherTest.stopwatch;
 
     @ClassRule
     public static final ExternalResource resource = WatcherTest.resource;
