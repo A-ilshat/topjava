@@ -50,6 +50,7 @@ public abstract class AbstractBaseTest {
                 "\n---------------------------------" +
                 results +
                 "\n---------------------------------");
+        results.delete(0, results.length());
     }
 
     @Autowired
