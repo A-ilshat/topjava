@@ -5,6 +5,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -14,16 +15,16 @@ public class DataJpaMealRepository implements MealRepository {
 
     private final CrudMealRepository crudRepository;
 
-    private final CrudUserRepository crudUserRepository;
+    private final EntityManager entityManager;
 
-    public DataJpaMealRepository(CrudMealRepository crudRepository, CrudUserRepository crudUserRepository) {
+    public DataJpaMealRepository(CrudMealRepository crudRepository, EntityManager entityManager) {
         this.crudRepository = crudRepository;
-        this.crudUserRepository = crudUserRepository;
+        this.entityManager = entityManager;
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
-        User user = crudUserRepository.findById(userId).orElse(null);
+        User user = entityManager.getReference(User.class, userId);
         meal.setUser(user);
         if (meal.isNew()) {
             return crudRepository.save(meal);
