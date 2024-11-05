@@ -1,20 +1,11 @@
-package ru.javawebinar.topjava.service.userServiceTest;
+package ru.javawebinar.topjava.service;
 
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExternalResource;
-import org.junit.rules.Stopwatch;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.UserTestData;
-import ru.javawebinar.topjava.WatcherTestUtil;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.service.AbstractBaseTest;
-import ru.javawebinar.topjava.service.UserService;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.util.List;
@@ -24,23 +15,8 @@ import static ru.javawebinar.topjava.UserTestData.*;
 
 
 public abstract class AbstractUserServiceTest extends AbstractBaseTest {
-
     @Autowired
     private UserService service;
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Rule
-    public final Stopwatch watcher = WatcherTestUtil.stopwatch;
-
-    @ClassRule
-    public static final ExternalResource resource = WatcherTestUtil.resource;
-
-    @Before
-    public void setup() {
-        cacheManager.getCache("users").clear();
-    }
 
     @Test
     public void create() {
