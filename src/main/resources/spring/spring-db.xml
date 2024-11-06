@@ -49,7 +49,7 @@
               p:password="${database.password}"/>
     </beans>
 
-    <beans profile="datajpa, jpa">
+    <beans profile="jpa, datajpa">
         <tx:annotation-driven/>
 
         <!-- Transaction manager for a single JPA EntityManagerFactory (alternative to JTA) -->
