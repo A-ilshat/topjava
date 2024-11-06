@@ -8,7 +8,6 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class DataJpaMealRepository implements MealRepository {
@@ -24,12 +23,9 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        User user = entityManager.getReference(User.class, userId);
-        meal.setUser(user);
-        if (meal.isNew()) {
-            return crudRepository.save(meal);
-        } else if (get(meal.getId(), userId) != null) {
-
+        if (meal.isNew() || get(meal.getId(), userId) != null) {
+            User user = entityManager.getReference(User.class, userId);
+            meal.setUser(user);
             return crudRepository.save(meal);
         }
         return null;
@@ -42,18 +38,17 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-        Optional<Meal> optional = Optional.ofNullable(crudRepository.findByIdAndUserId(id, userId));
-        return optional.orElse(null);
+        return crudRepository.findByIdAndUserId(id, userId);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        Optional<List<Meal>> optional = Optional.ofNullable(crudRepository.findAllByUserIdOrderByDateTimeDesc(userId));
-        return optional.orElse(null);
+        return crudRepository.findAll(userId);
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return crudRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
+
     }
 }

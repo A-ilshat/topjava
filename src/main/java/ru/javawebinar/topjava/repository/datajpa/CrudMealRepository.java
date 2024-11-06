@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +14,15 @@ import java.util.List;
 public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
 
     @Transactional
-    int deleteByIdAndUserId(Integer id, Integer userId);
+    @Modifying
+    @Query("DELETE FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
+    int deleteByIdAndUserId(@Param("id") Integer id, @Param("userId") int userId);
 
-    Meal findByIdAndUserId(Integer id, Integer userId);
+    @Query("SELECT m FROM Meal m WHERE m.id=:id AND m.user.id=:userId")
+    Meal findByIdAndUserId(@Param("id") Integer id, @Param("userId") int userId);
 
-    List<Meal> findAllByUserIdOrderByDateTimeDesc(Integer userId);
+    @Query("SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC")
+    List<Meal> findAll(@Param("userId") int userId);
 
     @Query("SELECT m FROM Meal m " +
             "WHERE m.user.id=:userId AND m.dateTime >= :startDateTime " +
