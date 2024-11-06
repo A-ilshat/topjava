@@ -6,7 +6,6 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
-import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,18 +14,18 @@ public class DataJpaMealRepository implements MealRepository {
 
     private final CrudMealRepository crudRepository;
 
-    private final EntityManager entityManager;
+    private final CrudUserRepository crudUserRepository;
 
-    public DataJpaMealRepository(CrudMealRepository crudRepository, EntityManager entityManager) {
+    public DataJpaMealRepository(CrudMealRepository crudRepository, CrudUserRepository crudUserRepository) {
         this.crudRepository = crudRepository;
-        this.entityManager = entityManager;
+        this.crudUserRepository = crudUserRepository;
     }
 
     @Override
     @Transactional
     public Meal save(Meal meal, int userId) {
         if (meal.isNew() || get(meal.getId(), userId) != null) {
-            User user = entityManager.getReference(User.class, userId);
+            User user = crudUserRepository.getReferenceById(userId);
             meal.setUser(user);
             return crudRepository.save(meal);
         }
@@ -51,6 +50,5 @@ public class DataJpaMealRepository implements MealRepository {
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return crudRepository.getBetweenHalfOpen(startDateTime, endDateTime, userId);
-
     }
 }
