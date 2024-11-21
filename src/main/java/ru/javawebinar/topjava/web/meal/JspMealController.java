@@ -48,13 +48,12 @@ public class JspMealController {
     }
 
 
-//    @GetMapping
-//    public String update(HttpServletRequest request, @ModelAttribute Meal meal) {
-//        int userId = SecurityUtil.authUserId();
-//        log.info("updating meal with userId {}", userId);
-//
-//        int id = Integer.parseInt(request.getParameter("id"));
-//        service.update(meal, userId);
-//        return "";
-//    }
+    @GetMapping("/{id}/edit")
+    public String update(@PathVariable int id, Model model) {
+        int userId = SecurityUtil.authUserId();
+        log.info("updating meal id: {} for userId: {}", id, userId);
+
+        model.addAttribute("meal", service.get(id, userId));
+        return "mealForm";
+    }
 }
