@@ -85,7 +85,7 @@ public class JspMealController {
         return "mealForm";
     }
 
-    @PatchMapping("/{id}/update")
+    @PostMapping("/{id}/update")
     public String update(@PathVariable int id, @ModelAttribute("meal") Meal meal) {
         int userId = SecurityUtil.authUserId();
         log.info("updating meal id: {} for userId: {}", id, userId);
@@ -94,7 +94,7 @@ public class JspMealController {
         return "redirect:/meals";
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping("/{id}/delete")
     public String delete(@PathVariable int id) {
         int userId = SecurityUtil.authUserId();
         log.info("deleting meal with userId {}", userId);

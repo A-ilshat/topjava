@@ -9,15 +9,14 @@
 
 <html>
 <head>
-    <title>Meals</title>
-    <link rel="stylesheet" href="${context_path}/resources/css/style.css">
+    <title><spring:message code="meal.title"/></title>
     <jsp:include page="fragments/headTag.jsp"/>
 </head>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <hr/>
-    <h2><spring:message code="meal.title"/> </h2>
+    <h2><spring:message code="meal.title"/></h2>
     <form method="get" action="${context_path}/meals/filter">
         <dl>
             <dt><spring:message code="meal.fromDate"/>:</dt>
@@ -61,11 +60,9 @@
                     <spring:message code="meal.update"/></a>
                 </td>
                 <td>
-                    <form method="POST" action="${context_path}/meals/${meal.id}">
-                        <input type="hidden" name="_method" value="DELETE" />
+                    <form method="POST" action="${context_path}/meals/${meal.id}/delete">
                         <button type="submit" class="delete-button-link"><spring:message code="meal.delete"/></button>
                     </form>
-
                 </td>
             </tr>
         </c:forEach>

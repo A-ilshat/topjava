@@ -3,13 +3,11 @@
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<c:set var="context_path" value="${pageContext.request.contextPath}"/>
 <c:set var="isNewMeal" value="${meal.id == null}"/>
 
 <html>
 <head>
-    <title>Meal</title>
-    <link rel="stylesheet" href="${context_path}/resources/css/style.css">
+    <title><spring:message code="meal.title"/></title>
     <jsp:include page="fragments/headTag.jsp"/>
 </head>
 <body>
@@ -18,13 +16,9 @@
     <hr>
     <c:set var="mealMessage" value="${isNewMeal ? 'meal.createMeal' : 'meal.editMeal'}"/>
     <h2><spring:message code="${mealMessage}"/></h2>
-    <%--    <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>--%>
-    <form:form action="${isNewMeal ? 'create' : 'update'}" method="post" modelAttribute="meal">
-        <form:hidden path="id"/>
-        <c:if test="${!isNewMeal}">
-            <input type="hidden" name="_method" value="PATCH">
-        </c:if>
 
+    <%--    <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>--%>
+    <form:form action="${isNewMeal ? 'create' : 'update'}" method="POST" modelAttribute="meal">
         <dl>
             <dt><spring:message code="meal.dateTime"/>:</dt>
                 <%--            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" required></dd>--%>
