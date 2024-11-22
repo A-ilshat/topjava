@@ -2,9 +2,7 @@ package ru.javawebinar.topjava.service;
 
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.env.Environment;
@@ -25,7 +23,7 @@ import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.Profiles.JDBC;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
@@ -42,8 +40,8 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Before
     public void setup() {
+        cacheManager.getCache("users").clear();
         if (isNotJdbcProfile()) {
-            cacheManager.getCache("users").clear();
             jpaUtil.clear2ndLevelHibernateCache();
         }
     }
@@ -97,17 +95,14 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void Aupdate() {
+    public void update() {
         User updated = getUpdated();
         service.update(updated);
-
-        User actualUser = service.getAll().stream()
-                        .filter(user -> user.getId() == USER_ID).findFirst().orElse(null);
-        USER_MATCHER.assertMatch(actualUser, getUpdated());
+        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdated());
     }
 
     @Test
-    public void BgetAll() {
+    public void getAll() {
         List<User> all = service.getAll();
         USER_MATCHER.assertMatch(all, admin, guest, user);
     }
