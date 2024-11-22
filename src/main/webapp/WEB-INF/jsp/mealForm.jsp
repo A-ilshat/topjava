@@ -15,7 +15,6 @@
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
-    <h3><a href="${context_path}"><spring:message code="app.home"/></a></h3>
     <hr>
     <c:set var="mealMessage" value="${isNewMeal ? 'meal.createMeal' : 'meal.editMeal'}"/>
     <h2><spring:message code="${mealMessage}"/></h2>

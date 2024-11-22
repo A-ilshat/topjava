@@ -16,7 +16,6 @@
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
-    <h3><a href="${context_path}"><spring:message code="app.home"/></a></h3>
     <hr/>
     <h2><spring:message code="meal.title"/> </h2>
     <form method="get" action="${context_path}/meals/filter">
