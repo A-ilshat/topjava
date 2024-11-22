@@ -2,7 +2,9 @@ package ru.javawebinar.topjava.service;
 
 import org.junit.Assume;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.env.Environment;
@@ -23,6 +25,7 @@ import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.Profiles.JDBC;
 import static ru.javawebinar.topjava.UserTestData.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
@@ -94,14 +97,17 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     }
 
     @Test
-    public void update() {
+    public void Aupdate() {
         User updated = getUpdated();
         service.update(updated);
-        USER_MATCHER.assertMatch(service.get(USER_ID), getUpdated());
+
+        User actualUser = service.getAll().stream()
+                        .filter(user -> user.getId() == USER_ID).findFirst().orElse(null);
+        USER_MATCHER.assertMatch(actualUser, getUpdated());
     }
 
     @Test
-    public void getAll() {
+    public void BgetAll() {
         List<User> all = service.getAll();
         USER_MATCHER.assertMatch(all, admin, guest, user);
     }
