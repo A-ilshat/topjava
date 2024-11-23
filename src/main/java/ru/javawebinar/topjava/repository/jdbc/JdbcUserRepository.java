@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -19,7 +18,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -73,7 +71,7 @@ public class JdbcUserRepository implements UserRepository {
                        SELECT * FROM users
                        LEFT JOIN user_role ON users.id = user_role.user_id
                        WHERE id=?
-                """, new UserWithRoleExtractor(), id);
+                """, userWithRoleExtractor, id);
         return DataAccessUtils.singleResult(users);
     }
 
@@ -82,7 +80,7 @@ public class JdbcUserRepository implements UserRepository {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         List<User> users = jdbcTemplate.query("""
                         SELECT * FROM users LEFT JOIN user_role ON users.id = user_role.user_id WHERE email=?
-                """, new UserWithRoleExtractor(), email);
+                """, userWithRoleExtractor, email);
         return DataAccessUtils.singleResult(users);
     }
 
@@ -90,11 +88,11 @@ public class JdbcUserRepository implements UserRepository {
     public List<User> getAll() {
         return jdbcTemplate.query("""
                     SELECT * FROM users LEFT JOIN user_role ON users.id = user_role.user_id ORDER BY name, email
-                """, new UserWithRoleExtractor());
+                """, userWithRoleExtractor);
     }
 
-    private int deleteRoles(int userId) {
-        return jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", userId);
+    private void deleteRoles(int userId) {
+        jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", userId);
     }
 
     private void insertRoles(Set<Role> roles, int userId) {
@@ -116,36 +114,33 @@ public class JdbcUserRepository implements UserRepository {
         });
     }
 
-    private static class UserWithRoleExtractor implements ResultSetExtractor<List<User>> {
-
-        @Override
-        public List<User> extractData(ResultSet rs) throws SQLException, DataAccessException {
-            Map<Integer, User> users = new LinkedHashMap<>();
-            Set<Role> roles = new HashSet<>();
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                User user = users.get(id);
-                if (user == null) {
-                    user = new User();
-                    user.setId(id);
-                    user.setName(rs.getString("name"));
-                    user.setEmail(rs.getString("email"));
-                    user.setPassword(rs.getString("password"));
-                    user.setRegistered(rs.getTimestamp("registered"));
-                    user.setEnabled(rs.getBoolean("enabled"));
-                    user.setCaloriesPerDay(rs.getInt("calories_per_day"));
-                    users.put(id, user);
-                }
-                String userId = rs.getString("user_id");
-                if (userId != null) {
-                    roles.add(Role.valueOf(rs.getString("role")));
-                    users.get(id).setRoles(roles);
-                } else {
-                    roles.clear();
-                    user.setRoles(EnumSet.noneOf(Role.class));
-                }
+    private final ResultSetExtractor<List<User>> userWithRoleExtractor = rse -> {
+        Map<Integer, User> users = new LinkedHashMap<>();
+        Set<Role> roles = new HashSet<>();
+        while (rse.next()) {
+            int id = rse.getInt("id");
+            User user = users.get(id);
+            if (user == null) {
+                user = new User();
+                user.setId(id);
+                user.setName(rse.getString("name"));
+                user.setEmail(rse.getString("email"));
+                user.setPassword(rse.getString("password"));
+                user.setRegistered(rse.getTimestamp("registered"));
+                user.setEnabled(rse.getBoolean("enabled"));
+                user.setCaloriesPerDay(rse.getInt("calories_per_day"));
+                users.put(id, user);
             }
-            return new ArrayList<>(users.values());
+            String userId = rse.getString("user_id");
+            if (userId != null) {
+                roles.add(Role.valueOf(rse.getString("role")));
+                users.get(id).setRoles(roles);
+            } else {
+                roles.clear();
+                user.setRoles(EnumSet.noneOf(Role.class));
+            }
         }
-    }
+        return new ArrayList<>(users.values());
+
+    };
 }
