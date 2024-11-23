@@ -4,20 +4,14 @@
 <%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-
-<c:set var="context_path" value="${pageContext.request.contextPath}"/>
-
 <html>
-<head>
-    <title><spring:message code="meal.title"/></title>
-    <jsp:include page="fragments/headTag.jsp"/>
-</head>
+<jsp:include page="fragments/headTag.jsp"/>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <hr/>
     <h2><spring:message code="meal.title"/></h2>
-    <form method="get" action="${context_path}/meals/filter">
+    <form method="get" action="meals/filter">
         <dl>
             <dt><spring:message code="meal.fromDate"/>:</dt>
             <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
@@ -56,11 +50,11 @@
                 <td>${fn:formatDateTime(meal.dateTime)}</td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
-                <td><a href="${context_path}/meals/${meal.id}/edit-form" class="edit-button-link">
+                <td><a href="meals/${meal.id}/edit-form" class="edit-button-link">
                     <spring:message code="meal.update"/></a>
                 </td>
                 <td>
-                    <form method="POST" action="${context_path}/meals/${meal.id}/delete">
+                    <form method="POST" action="meals/${meal.id}/delete">
                         <button type="submit" class="delete-button-link"><spring:message code="meal.delete"/></button>
                     </form>
                 </td>

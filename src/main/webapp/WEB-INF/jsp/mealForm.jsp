@@ -6,10 +6,7 @@
 <c:set var="isNewMeal" value="${meal.id == null}"/>
 
 <html>
-<head>
-    <title><spring:message code="meal.title"/></title>
-    <jsp:include page="fragments/headTag.jsp"/>
-</head>
+<jsp:include page="fragments/headTag.jsp"/>
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
@@ -17,21 +14,17 @@
     <c:set var="mealMessage" value="${isNewMeal ? 'meal.createMeal' : 'meal.editMeal'}"/>
     <h2><spring:message code="${mealMessage}"/></h2>
 
-    <%--    <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>--%>
     <form:form action="${isNewMeal ? 'create' : 'update'}" method="POST" modelAttribute="meal">
         <dl>
             <dt><spring:message code="meal.dateTime"/>:</dt>
-                <%--            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" required></dd>--%>
             <dd><form:input path="dateTime" type="datetime-local"/></dd>
         </dl>
         <dl>
             <dt><spring:message code="meal.description"/>:</dt>
-                <%--            <dd><input type="text" value="${meal.description}" size=40 name="description" required></dd>--%>
             <dd><form:input path="description" type="text"/></dd>
         </dl>
         <dl>
             <dt><spring:message code="meal.calories"/>::</dt>
-                <%--            <dd><input type="number" value="${meal.calories}" name="calories" required></dd>--%>
             <dd><form:input path="calories" type="number"/></dd>
         </dl>
         <button type="submit"><spring:message code="meal.save"/></button>
