@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.Profiles.JDBC;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@ContextConfiguration(locations = "classpath:spring/spring-cache.xml")
+@ContextConfiguration(locations = "classpath:spring/spring-cache-test.xml")
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
