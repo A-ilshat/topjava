@@ -117,22 +117,16 @@ public class JdbcUserRepository implements UserRepository {
     private final ResultSetExtractor<List<User>> userWithRoleExtractor = rse -> {
         Map<Integer, User> users = new LinkedHashMap<>();
         Set<Role> roles = new HashSet<>();
+
         while (rse.next()) {
             int id = rse.getInt("id");
             User user = users.get(id);
             if (user == null) {
-                user = new User();
-                user.setId(id);
-                user.setName(rse.getString("name"));
-                user.setEmail(rse.getString("email"));
-                user.setPassword(rse.getString("password"));
-                user.setRegistered(rse.getTimestamp("registered"));
-                user.setEnabled(rse.getBoolean("enabled"));
-                user.setCaloriesPerDay(rse.getInt("calories_per_day"));
+                user = new User(Objects.requireNonNull(ROW_MAPPER.mapRow(rse, id)));
                 users.put(id, user);
             }
-            String userId = rse.getString("user_id");
-            if (userId != null) {
+            String role = rse.getString("role");
+            if (role != null) {
                 roles.add(Role.valueOf(rse.getString("role")));
                 users.get(id).setRoles(roles);
             } else {
@@ -141,6 +135,5 @@ public class JdbcUserRepository implements UserRepository {
             }
         }
         return new ArrayList<>(users.values());
-
     };
 }
