@@ -51,9 +51,11 @@ public class JdbcUserRepository implements UserRepository {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
         } else if (namedParameterJdbcTemplate.update("""
-                       UPDATE users AS usr SET name=:name, email=:email, password=:password,
+                       UPDATE users SET name=:name, email=:email, password=:password,
                        registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id
-                """, parameterSource) == 0) {
+                """, parameterSource) != 0) {
+            deleteRoles(user.getId());
+        } else {
             return null;
         }
         insertRoles(user.getRoles(), user.getId());
@@ -91,8 +93,11 @@ public class JdbcUserRepository implements UserRepository {
                 """, new UserWithRoleExtractor());
     }
 
+    private int deleteRoles(int userId) {
+        return jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", userId);
+    }
+
     private void insertRoles(Set<Role> roles, int userId) {
-        jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", userId);
         jdbcTemplate.batchUpdate("""
                 INSERT INTO user_role(user_id, role) VALUES (?, ?)
                 """, new BatchPreparedStatementSetter() {
@@ -132,7 +137,7 @@ public class JdbcUserRepository implements UserRepository {
                     users.put(id, user);
                 }
                 String userId = rs.getString("user_id");
-                if (userId != null ) {
+                if (userId != null) {
                     roles.add(Role.valueOf(rs.getString("role")));
                     users.get(id).setRoles(roles);
                 } else {
