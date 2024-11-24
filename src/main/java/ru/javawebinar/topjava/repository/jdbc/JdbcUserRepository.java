@@ -30,6 +30,29 @@ public class JdbcUserRepository implements UserRepository {
 
     private final SimpleJdbcInsert insertUser;
 
+    private final ResultSetExtractor<List<User>> userWithRoleExtractor = rse -> {
+        Map<Integer, User> users = new LinkedHashMap<>();
+        Set<Role> roles = new HashSet<>();
+
+        while (rse.next()) {
+            int id = rse.getInt("id");
+            User user = users.get(id);
+            if (user == null) {
+                user = new User(Objects.requireNonNull(ROW_MAPPER.mapRow(rse, id)));
+                users.put(id, user);
+            }
+            String role = rse.getString("role");
+            if (role != null) {
+                roles.add(Role.valueOf(rse.getString("role")));
+                users.get(id).setRoles(roles);
+            } else {
+                roles.clear();
+                user.setRoles(EnumSet.noneOf(Role.class));
+            }
+        }
+        return new ArrayList<>(users.values());
+    };
+
     @Autowired
     public JdbcUserRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, Validator validator, Validator validator1) {
         this.insertUser = new SimpleJdbcInsert(jdbcTemplate)
@@ -111,27 +134,4 @@ public class JdbcUserRepository implements UserRepository {
             }
         });
     }
-
-    private final ResultSetExtractor<List<User>> userWithRoleExtractor = rse -> {
-        Map<Integer, User> users = new LinkedHashMap<>();
-        Set<Role> roles = new HashSet<>();
-
-        while (rse.next()) {
-            int id = rse.getInt("id");
-            User user = users.get(id);
-            if (user == null) {
-                user = new User(Objects.requireNonNull(ROW_MAPPER.mapRow(rse, id)));
-                users.put(id, user);
-            }
-            String role = rse.getString("role");
-            if (role != null) {
-                roles.add(Role.valueOf(rse.getString("role")));
-                users.get(id).setRoles(roles);
-            } else {
-                roles.clear();
-                user.setRoles(EnumSet.noneOf(Role.class));
-            }
-        }
-        return new ArrayList<>(users.values());
-    };
 }
