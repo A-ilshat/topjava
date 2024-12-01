@@ -10,13 +10,11 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
+import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static ru.javawebinar.topjava.web.meal.MealRestController.REST_URL;
-import static org.springframework.format.annotation.DateTimeFormat.ISO.*;
 
 @RestController
 @RequestMapping(value = REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
