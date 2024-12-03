@@ -8,11 +8,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class CustomDateFormatter implements Formatter<LocalDate> {
-    private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
     @Override
     public LocalDate parse(String text, Locale locale) throws ParseException {
-        return LocalDate.parse(text, format);
+        return LocalDate.parse(text);
     }
 
     @Override
