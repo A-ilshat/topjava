@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -11,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
-import ru.javawebinar.topjava.Profiles;
 
 import javax.annotation.PostConstruct;
+
+import static ru.javawebinar.topjava.Profiles.DATAJPA;
+import static ru.javawebinar.topjava.Profiles.REPOSITORY_IMPLEMENTATION;
 
 @SpringJUnitWebConfig(locations = {
         "classpath:spring/spring-app.xml",
@@ -23,10 +26,13 @@ import javax.annotation.PostConstruct;
 //@WebAppConfiguration
 //@ExtendWith(SpringExtension.class)
 @Transactional
-@ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = Profiles.REPOSITORY_IMPLEMENTATION)
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = REPOSITORY_IMPLEMENTATION)
 public abstract class AbstractControllerTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
+
+    @Autowired
+    private Environment environment;
 
     static {
         CHARACTER_ENCODING_FILTER.setEncoding("UTF-8");
@@ -44,6 +50,10 @@ public abstract class AbstractControllerTest {
                 .webAppContextSetup(webApplicationContext)
                 .addFilter(CHARACTER_ENCODING_FILTER)
                 .build();
+    }
+
+    protected boolean isDataJpaProfile() {
+        return environment.acceptsProfiles(org.springframework.core.env.Profiles.of(DATAJPA));
     }
 
     protected ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {

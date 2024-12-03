@@ -6,25 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
-import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
-import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
+
+import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 class MealRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = MealRestController.REST_URL + '/';
-    private static final String FILTER_PARAMS = "filter?startDate=2020-01-31T10:00:00" +
-            "&startTime=2020-01-31T00:00:00" +
-            "&endDate=2020-01-31T10:00:00" +
-            "&endTime=2020-01-31T23:00:00";
 
     @Autowired
     private MealService mealService;
@@ -43,6 +43,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_URL + MEAL1_ID))
                 .andExpect(status().isNoContent())
                 .andDo(print());
+        Assertions.assertThrows(NotFoundException.class, () -> mealService.get(MEAL1_ID, USER_ID));
     }
 
     @Test
@@ -51,9 +52,7 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEALTO_MATCHER.contentJson(MealsUtil.getTos(meals, AUTH_USER_CALORIES_PER_DAY)));
-
-        Assertions.assertThrows(NotFoundException.class, () -> mealService.get(MEAL1_ID, AUTH_USER_CALORIES_PER_DAY));
+                .andExpect(MEALTO_MATCHER.contentJson(mealTo7, mealTo6, mealTo5, mealTo4, mealTo3, mealTo2, mealTo1));
     }
 
     @Test
@@ -67,7 +66,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         Meal created = MEAL_MATCHER.readFromJson(action);
         newMeal.setId(created.id());
         MEAL_MATCHER.assertMatch(created, newMeal);
-        MEAL_MATCHER.assertMatch(mealService.get(created.id(), SecurityUtil.authUserId()), newMeal);
+        MEAL_MATCHER.assertMatch(mealService.get(created.id(), USER_ID), newMeal);
     }
 
     @Test
@@ -78,15 +77,23 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
 
-        MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, SecurityUtil.authUserId()), updated);
+        MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, USER_ID), updated);
     }
 
     @Test
     void getBetween() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + FILTER_PARAMS))
+        MultiValueMap<String, String> filterParams = new LinkedMultiValueMap<>();
+        filterParams.add("startDate", "2020-01-31T10:00:00");
+        filterParams.add("startTime", "2020-01-31T00:00:00");
+        filterParams.add("endDate", "2020-01-31T10:00:00");
+        filterParams.add("endTime", "2020-01-31T23:00:00");
+
+        List<MealTo> meals = List.of(mealTo7, mealTo6, mealTo5, mealTo4);
+        perform(MockMvcRequestBuilders.get(REST_URL + "/filter")
+                .params(filterParams))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEALTO_MATCHER.contentJson(mealToList));
+                .andExpect(MEALTO_MATCHER.contentJson(meals));
     }
 }

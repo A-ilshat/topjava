@@ -6,6 +6,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +22,10 @@ public class MatcherFactory {
         return new Matcher<>(clazz, fieldsToIgnore);
     }
 
+    public static <T> Matcher<T> matcher(Class<T> clazz) {
+        return new Matcher<>(clazz);
+    }
+
     public static class Matcher<T> {
         private final Class<T> clazz;
         private final String[] fieldsToIgnore;
@@ -28,6 +33,11 @@ public class MatcherFactory {
         private Matcher(Class<T> clazz, String... fieldsToIgnore) {
             this.clazz = clazz;
             this.fieldsToIgnore = fieldsToIgnore;
+        }
+
+        private Matcher(Class<T> clazz) {
+            this.clazz = clazz;
+            this.fieldsToIgnore = new String[0];
         }
 
         public void assertMatch(T actual, T expected) {

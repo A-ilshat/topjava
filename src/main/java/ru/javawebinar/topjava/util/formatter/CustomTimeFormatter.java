@@ -9,9 +9,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class CustomTimeFormatter implements Formatter<LocalTime> {
+    private static final DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @Override
     public LocalTime parse(@Nullable String text, Locale locale) throws ParseException {
-        return LocalTime.parse(text, DateTimeFormatter.ofPattern("HH:mm"));
+        return LocalTime.parse(text, format);
     }
 
     @Override

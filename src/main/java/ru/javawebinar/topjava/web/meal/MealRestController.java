@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.web.meal;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +10,9 @@ import ru.javawebinar.topjava.to.MealTo;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-import static org.springframework.format.annotation.DateTimeFormat.ISO.DATE_TIME;
 import static ru.javawebinar.topjava.web.meal.MealRestController.REST_URL;
 
 @RestController
@@ -43,7 +40,6 @@ public class MealRestController extends AbstractMealController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Meal> createMeal(@RequestBody Meal meal) {
         Meal created = super.create(meal);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
