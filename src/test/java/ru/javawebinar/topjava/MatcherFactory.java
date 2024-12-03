@@ -22,7 +22,7 @@ public class MatcherFactory {
         return new Matcher<>(clazz, fieldsToIgnore);
     }
 
-    public static <T> Matcher<T> matcher(Class<T> clazz) {
+    public static <T> Matcher<T> usingAllFieldsComparator(Class<T> clazz) {
         return new Matcher<>(clazz);
     }
 
