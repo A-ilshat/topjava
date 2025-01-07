@@ -8,6 +8,9 @@ function makeEditable(datatableApi) {
             deleteRow($(this).closest('tr').attr("id"));
         }
     });
+    $(".edit").click(function () {
+        edit($(this).closest('tr').attr("id"));
+    })
 
     $(document).ajaxError(function (event, jqXHR, options, jsExc) {
         failNoty(jqXHR);
@@ -20,6 +23,22 @@ function makeEditable(datatableApi) {
 function add() {
     form.find(":input").val("");
     $("#editRow").modal();
+}
+
+function edit(id) {
+    $.ajax({
+        url: ctx.ajaxUrl + id,
+        type: "GET"
+    }).done(function (response) {
+        $("#editRow").modal();
+
+        $("#id").val(response.id);
+        $("#dateTime").val(response.dateTime);
+        $("#description").val(response.description);
+        $("#calories").val(response.calories);
+    }).error(function () {
+        alert("some thing wrong...");
+    })
 }
 
 function deleteRow(id) {
@@ -46,7 +65,11 @@ function save() {
     }).done(function () {
         $("#editRow").modal("hide");
         updateTable();
-        successNoty("Saved");
+        if (form.find(':input[name="id"]').val().length === 0) {
+            successNoty("Saved");
+        } else {
+            successNoty("Updated");
+        }
     });
 }
 
