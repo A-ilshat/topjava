@@ -13,27 +13,50 @@
     <div class="container">
         <section>
             <h3><spring:message code="meal.title"/></h3>
+            <div class="accordion" id="accordion2">
+                <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2"
+                           href="#collapseOne">
+                            <button class="btn btn-info">Фильтр</button>
+                            <hr>
+                        </a>
+                    </div>
+                    <div id="collapseOne" class="accordion-body collapse in">
+                        <div class="accordion-inner">
+                            <div class="container border border-secondary rounded">
+                                <form method="get" action="meals/filter">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="startDate" class="form-label"><spring:message code="meal.startDate"/>:</label>
+                                            <input type="date" name="startDate" class="form-control" id="startDate" value="${param.startDate}">
+                                        </div>
 
-            <form method="get" action="meals/filter">
-                <dl>
-                    <dt><spring:message code="meal.startDate"/>:</dt>
-                    <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
-                </dl>
-                <dl>
-                    <dt><spring:message code="meal.endDate"/>:</dt>
-                    <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
-                </dl>
-                <dl>
-                    <dt><spring:message code="meal.startTime"/>:</dt>
-                    <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
-                </dl>
-                <dl>
-                    <dt><spring:message code="meal.endTime"/>:</dt>
-                    <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
-                </dl>
-                <button type="submit"><spring:message code="meal.filter"/></button>
-            </form>
-            <hr>
+                                        <div class="col">
+                                            <label for="endDate" class="form-label"><spring:message code="meal.startDate"/>:</label>
+                                            <input type="date" name="endDate" class="form-control" id="endDate" value="${param.endDate}">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="startTime" class="form-label"><spring:message code="meal.startTime"/>:</label>
+                                            <input type="time" name="startTime" class="form-control" id="startTime" value="${param.startTime}">
+                                        </div>
+
+                                        <div class="col">
+                                            <label for="endTime" class="form-label"><spring:message code="meal.endTime"/>:</label>
+                                            <input type="time" name="endTime" class="form-control" id="endTime" value="${param.endTime}">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <button type="submit" class="btn btn-success btn-sm pull-right"><spring:message code="meal.filter"/></button>
+                                </form><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><br>
             <button class="btn btn-primary" onclick="add()">
                 <span class="fa fa-plus"></span>
                 <spring:message code="meal.add"/>
