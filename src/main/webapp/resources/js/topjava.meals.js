@@ -30,3 +30,23 @@ $(function () {
         })
     )
 })
+
+function getBetween() {
+    let startDate = $("#startDate").val();
+    let endDate = $("#endDate").val();
+    let startTime = $("#startTime").val();
+    let endTime = $("#endTime").val();
+
+    let filterParams = "filter?startDate=" + startDate + "&endDate=" + endDate
+        + "&startTime=" + startTime + "&endTime=" + endTime
+
+    $.get(ctx.ajaxUrl + filterParams, function (data) {
+        ctx.datatableApi.clear().rows.add(data).draw();
+    });
+}
+function resetFilter() {
+    $("#startDate").val("");
+    $("#endDate").val("");
+    $("#startTime").val("");
+    $("#endTime").val("");
+}
