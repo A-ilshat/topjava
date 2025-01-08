@@ -36,8 +36,8 @@ function edit(id) {
         $("#dateTime").val(response.dateTime);
         $("#description").val(response.description);
         $("#calories").val(response.calories);
-    }).error(function () {
-        alert("some thing wrong...");
+    }).fail(function () {
+        failNoty("some thing wrong...");
     })
 }
 

@@ -45,3 +45,34 @@ $(function () {
         })
     );
 });
+
+$(function () {
+    $('#datatable').on('click', 'input[type="checkbox"]', function () {
+        const userId = $(this).closest('tr').attr('id');
+        let checkboxStatus = $(this).is(':checked');
+
+        if (checkboxStatus === false) {
+            toggleUserStatus(userId, checkboxStatus, "Deactivated");
+            $(this).closest('tr').addClass('table table-danger');
+        } else {
+            toggleUserStatus(userId, checkboxStatus, "Activated");
+            $(this).closest('tr').removeClass('table table-danger')
+        }
+    });
+});
+
+function toggleUserStatus(userId, checkboxStatus, profileStatus) {
+    $.ajax({
+        url: ctx.ajaxUrl + userId,
+        type: "PATCH",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "id": userId,
+            "enabled": checkboxStatus
+        })
+    }).done(function () {
+        successNoty("User " + userId + " was been " + profileStatus)
+    }).fail(function () {
+        failNoty("some thing wrong...");
+    })
+}
