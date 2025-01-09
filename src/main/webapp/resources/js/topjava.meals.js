@@ -32,15 +32,16 @@ $(function () {
 })
 
 function getBetween() {
-    let startDate = $("#startDate").val();
-    let endDate = $("#endDate").val();
-    let startTime = $("#startTime").val();
-    let endTime = $("#endTime").val();
-
-    let filterParams = "filter?startDate=" + startDate + "&endDate=" + endDate
-        + "&startTime=" + startTime + "&endTime=" + endTime
-    updateTable(filterParams);
+    form = $('#filterForm');
+    $.ajax({
+        type: "GET",
+        url: ctx.ajaxUrl + "filter",
+        data: form.serialize()
+    }).done(function (data) {
+        ctx.datatableApi.clear().rows.add(data).draw();
+    })
 }
+
 function resetFilter() {
     $("#startDate").val("");
     $("#endDate").val("");

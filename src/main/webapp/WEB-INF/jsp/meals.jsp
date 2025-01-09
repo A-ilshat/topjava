@@ -15,30 +15,31 @@
             <h3><spring:message code="meal.title"/></h3>
 
             <div class="container border border-secondary rounded">
-                <div class="row">
-                    <div class="col">
-                        <label for="startDate" class="form-label"><spring:message code="meal.startDate"/>:</label>
-                        <input type="date" name="startDate" class="form-control" id="startDate" value="${param.startDate}">
+                <form id="filterForm">
+                    <div class="row">
+                        <div class="col">
+                            <label for="startDate" class="form-label"><spring:message code="meal.startDate"/>:</label>
+                            <input type="date" name="startDate" class="form-control" id="startDate" value="${param.startDate}">
+                        </div>
+
+                        <div class="col">
+                            <label for="endDate" class="form-label"><spring:message code="meal.startDate"/>:</label>
+                            <input type="date" name="endDate" class="form-control" id="endDate" value="${param.endDate}">
+                        </div>
                     </div>
 
-                    <div class="col">
-                        <label for="endDate" class="form-label"><spring:message code="meal.startDate"/>:</label>
-                        <input type="date" name="endDate" class="form-control" id="endDate" value="${param.endDate}">
-                    </div>
-                </div>
+                    <div class="row pb-3">
+                        <div class="col">
+                            <label for="startTime" class="form-label"><spring:message code="meal.startTime"/>:</label>
+                            <input type="time" name="startTime" class="form-control" id="startTime" value="${param.startTime}">
+                        </div>
 
-                <div class="row pb-3">
-                    <div class="col">
-                        <label for="startTime" class="form-label"><spring:message code="meal.startTime"/>:</label>
-                        <input type="time" name="startTime" class="form-control" id="startTime" value="${param.startTime}">
+                        <div class="col">
+                            <label for="endTime" class="form-label"><spring:message code="meal.endTime"/>:</label>
+                            <input type="time" name="endTime" class="form-control" id="endTime" value="${param.endTime}">
+                        </div>
                     </div>
-
-                    <div class="col">
-                        <label for="endTime" class="form-label"><spring:message code="meal.endTime"/>:</label>
-                        <input type="time" name="endTime" class="form-control" id="endTime" value="${param.endTime}">
-                    </div>
-                </div>
-
+                </form>
                 <div class="row pb-3">
                     <div class="col">
                         <button onclick="resetFilter()" class="btn btn-warning btn-sm pull-left"><spring:message code="meal.filterReset"/></button>
