@@ -50,9 +50,8 @@ public class UserTestData {
         return updated;
     }
 
-    public static User getDeactivateUser() {
+    public static User getDeactivatedUser() {
         User deactivateUser = new User(user);
-
         deactivateUser.setEnabled(false);
         return deactivateUser;
     }

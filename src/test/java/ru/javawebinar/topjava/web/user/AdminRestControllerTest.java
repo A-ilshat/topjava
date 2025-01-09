@@ -96,7 +96,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     void toggleUserStatus() throws Exception {
-        User deactivatedUser = getDeactivateUser();
+        User deactivatedUser = getDeactivatedUser();
         perform(MockMvcRequestBuilders.patch(REST_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(deactivatedUser)))
