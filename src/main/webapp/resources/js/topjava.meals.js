@@ -39,14 +39,12 @@ function getBetween() {
 
     let filterParams = "filter?startDate=" + startDate + "&endDate=" + endDate
         + "&startTime=" + startTime + "&endTime=" + endTime
-
-    $.get(ctx.ajaxUrl + filterParams, function (data) {
-        ctx.datatableApi.clear().rows.add(data).draw();
-    });
+    updateTable(filterParams);
 }
 function resetFilter() {
     $("#startDate").val("");
     $("#endDate").val("");
     $("#startTime").val("");
     $("#endTime").val("");
+    updateTable();
 }

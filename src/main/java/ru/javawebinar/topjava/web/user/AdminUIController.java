@@ -27,10 +27,8 @@ public class AdminUIController extends AbstractUserController {
 
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@RequestBody User user, @PathVariable int id) {
-        User updated = get(id);
-        updated.setEnabled(user.isEnabled());
-        super.update(updated, id);
+    public void toggleUserStatus(@RequestBody User user, @PathVariable int id) {
+        super.toggleUserStatus(id, user.isEnabled());
     }
 
     @PostMapping

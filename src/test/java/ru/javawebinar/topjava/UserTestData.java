@@ -49,4 +49,11 @@ public class UserTestData {
         updated.setRoles(Collections.singletonList(Role.ADMIN));
         return updated;
     }
+
+    public static User getDeactivateUser() {
+        User deactivateUser = new User(user);
+
+        deactivateUser.setEnabled(false);
+        return deactivateUser;
+    }
 }

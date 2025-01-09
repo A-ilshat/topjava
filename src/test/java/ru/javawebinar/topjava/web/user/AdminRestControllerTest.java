@@ -93,4 +93,15 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_WITH_MEALS_MATCHER.contentJson(admin));
     }
+
+    @Test
+    void toggleUserStatus() throws Exception {
+        User deactivatedUser = getDeactivateUser();
+        perform(MockMvcRequestBuilders.patch(REST_URL + USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(deactivatedUser)))
+                .andExpect(status().isNoContent());
+
+        USER_MATCHER.assertMatch(userService.get(USER_ID), deactivatedUser);
+    }
 }
