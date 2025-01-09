@@ -41,7 +41,15 @@ $(function () {
                     0,
                     "asc"
                 ]
-            ]
+            ],
+            "rowCallback": function (row) {
+                let checkbox = $(row).find("input[type='checkbox']");
+                if (checkbox.length > 0 && !checkbox.is(":checked")) {
+                    $(row).addClass('table table-danger');
+                } else {
+                    $(row).removeClass('table table-danger');
+                }
+            }
         })
     );
 });
@@ -50,7 +58,6 @@ $(function () {
     $('#datatable').on('click', 'input[type="checkbox"]', function () {
         const userId = $(this).closest('tr').attr('id');
         let checkboxStatus = $(this).is(':checked');
-
         $.ajax({
             url: ctx.ajaxUrl + userId,
             type: "PATCH",
@@ -60,16 +67,10 @@ $(function () {
                 "enabled": checkboxStatus
             })
         }).done(function () {
-            successNoty("User " + userId + " was been " + profileStatus)
+            $('#datatable').DataTable().draw();
+            successNoty("User " + userId + " was been " + (!checkboxStatus ? "Deactivated" : "Activated"))
         }).fail(function () {
             failNoty("some thing wrong...");
         })
-
-        if (checkboxStatus === false) {
-            $(this).closest('tr').addClass('table table-danger');
-        } else {
-            $(this).closest('tr').removeClass('table table-danger');
-        }
-
     });
 });
