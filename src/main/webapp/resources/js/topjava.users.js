@@ -60,8 +60,7 @@ $(function () {
         let checkboxStatus = $(this).is(':checked');
         let row = $(this).closest('tr');
         $.ajax({
-            url: ctx.ajaxUrl + userId,
-            type: "PATCH",
+            url: ctx.ajaxUrl + userId,            type: "PATCH",
             contentType: "application/json",
             data: JSON.stringify({
                 "id": userId,
@@ -71,7 +70,7 @@ $(function () {
             successNoty("User " + userId + " was been " + (!checkboxStatus ? "Deactivated" : "Activated"))
             !checkboxStatus ? row.addClass('table table-danger') : row.removeClass('table table-danger');
         }).fail(function () {
-            $(this).prop('checked', false);
+            row.find('input[type="checkbox"]').prop("checked", !checkboxStatus);
         })
     });
 });

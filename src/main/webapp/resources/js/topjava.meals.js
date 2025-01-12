@@ -38,14 +38,11 @@ function getBetween() {
         url: ctx.ajaxUrl + "filter",
         data: form.serialize()
     }).done(function (data) {
-        ctx.datatableApi.clear().rows.add(data).draw();
+        redrawTable(data)
     })
 }
 
 function resetFilter() {
-    $("#startDate").val("");
-    $("#endDate").val("");
-    $("#startTime").val("");
-    $("#endTime").val("");
+    $("#filterForm")[0].reset();
     updateTable();
 }
