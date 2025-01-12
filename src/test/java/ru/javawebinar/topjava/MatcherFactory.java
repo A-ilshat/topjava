@@ -79,9 +79,5 @@ public class MatcherFactory {
         private static String getContent(MvcResult result) throws UnsupportedEncodingException {
             return result.getResponse().getContentAsString();
         }
-
-        public void assertMatch(boolean actual, boolean expected) {
-            assertThat(actual).isEqualTo(expected);
-        }
     }
 }

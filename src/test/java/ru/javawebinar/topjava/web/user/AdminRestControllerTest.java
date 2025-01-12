@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -96,12 +97,14 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     void toggleUserStatus() throws Exception {
-        User deactivatedUser = getDeactivatedUser();
+        User deactivatedUser = new User();
+        deactivatedUser.setEnabled(getDeactivatedUser().isEnabled());
+
         perform(MockMvcRequestBuilders.patch(REST_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(deactivatedUser)))
                 .andExpect(status().isNoContent());
 
-        USER_MATCHER.assertMatch(userService.get(USER_ID), deactivatedUser);
+        Assertions.assertFalse(userService.get(USER_ID).isEnabled());
     }
 }

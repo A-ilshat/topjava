@@ -74,9 +74,8 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Test
     void toggleUserStatus() {
         User updated = getDeactivatedUser();
-        service.update(updated);
+        service.toggleUserStatus(USER_ID, updated.isEnabled());
         USER_MATCHER.assertMatch(service.get(USER_ID), getDeactivatedUser());
-        USER_MATCHER.assertMatch(service.get(USER_ID).isEnabled(), false);
     }
 
     @Test
