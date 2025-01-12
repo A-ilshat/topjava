@@ -32,11 +32,10 @@ $(function () {
 })
 
 function getBetween() {
-    form = $('#filterForm');
     $.ajax({
         type: "GET",
         url: ctx.ajaxUrl + "filter",
-        data: form.serialize()
+        data: $('#filterForm').serialize()
     }).done(function (data) {
         redrawTable(data)
     })
