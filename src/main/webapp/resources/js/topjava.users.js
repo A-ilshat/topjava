@@ -57,8 +57,9 @@ $(function () {
 $(function () {
     $('#datatable').on('click', 'input[type="checkbox"]', function () {
         const userId = $(this).closest('tr').attr('id');
-        let checkboxStatus = $(this).is(':checked');
-        let row = $(this).closest('tr');
+        const checkboxStatus = $(this).is(':checked');
+        const row = $(this).closest('tr');
+        const  checkbox = row.find('input[type="checkbox"]');
         $.ajax({
             url: ctx.ajaxUrl + userId,            type: "PATCH",
             contentType: "application/json",
@@ -70,7 +71,7 @@ $(function () {
             successNoty("User " + userId + " was been " + (!checkboxStatus ? "Deactivated" : "Activated"))
             !checkboxStatus ? row.addClass('table table-danger') : row.removeClass('table table-danger');
         }).fail(function () {
-            row.find('input[type="checkbox"]').prop("checked", !checkboxStatus);
+            checkbox.prop("checked", !checkboxStatus);
         })
     });
 });
