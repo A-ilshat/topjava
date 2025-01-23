@@ -8,6 +8,7 @@ function makeEditable(datatableApi) {
             deleteRow($(this).closest('tr').attr("id"));
         }
     });
+
     $(".edit").click(function () {
         edit($(this).closest('tr').attr("id"));
     })
